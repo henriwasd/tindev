@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { KeyboardAvoidingView, Text, Platform, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage'
+import { NPS } from "react-native-nps";
 
 import logo from '../assets/logo.png'
 import api from '../services/api';
 
 export default function Login ({ navigation }) {
   const [user, setUser] = useState('')
+  state = {
+    show: false
+  }
 
   useEffect(() => {
     AsyncStorage.getItem('user').then(user => {
@@ -15,6 +19,11 @@ export default function Login ({ navigation }) {
       }
     })
   }, [])
+
+  onPress = () => {
+    this.setState((prevState) => ({ show: !prevState.show }));
+  }
+
 
   async function handleLogin () {
     const response = await api.post('/devs', { username: user })
@@ -44,9 +53,10 @@ export default function Login ({ navigation }) {
         value={ user }
         onChangeText={ setUser }
       />
-      <TouchableOpacity onPress={ handleLogin } style={ styles.button }>
-        <Text style={ styles.buttonText }>Enviar</Text>
-      </TouchableOpacity>
+      <TouchableOpacity onPress={this.onPress} style={styles.button}>
+          <Text style={styles.text}>Press Me</Text>
+        </TouchableOpacity>
+        <NPS show={this.state.show} />
     </KeyboardAvoidingView>
   )
 }
